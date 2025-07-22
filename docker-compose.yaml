@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # Neo4j Graph Database Service
+  neo4j:
+    image: neo4j:5
+    container_name: neo4j_db
+    ports:
+      - "7474:7474" # HTTP
+      - "7687:7687" # Bolt
+    volumes:
+      - neo4j_data:/data
+    environment:
+      # Set a password for the neo4j user.
+      # IMPORTANT: Change 'your_strong_password' to a secure password.
+      - NEO4J_AUTH=neo4j/your_strong_password
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  # ChromaDB Vector Database Service
+  chromadb:
+    image: chromadb/chroma
+    container_name: chromadb_vector_db
+    ports:
+      - "8000:8000"
+    volumes:
+      - chromadb_data:/chroma # Persist data to a volume
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # Redis Service
+  redis:
+    image: redis:7
+    container_name: redis_db
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # MongoDB Service
+  mongo:
+    image: mongo:7
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  # Docker-managed volumes for persistent data storage
+  neo4j_data:
+    driver: local
+  chromadb_data:
+    driver: local
+  redis_data:
+    driver: local
+  mongo_data:
+    driver: local
+
