@@ -1,5 +1,7 @@
-import requests
 import os
+
+import requests
+
 
 def test_list_files():
     repo_relative_path = "../cloned_repos/gstream"
@@ -13,6 +15,7 @@ def test_list_files():
     assert "files" in response.json()
     assert any(f.endswith("main.go") for f in response.json()["files"])
     print("Test passed: main.go found in file list.")
+
 
 if __name__ == "__main__":
     test_list_files()

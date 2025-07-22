@@ -1,7 +1,9 @@
 import os
+
 import redis
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+
 
 class RedisClientSingleton:
     _instance = None
@@ -16,18 +18,22 @@ class RedisClientSingleton:
     def client(self):
         return self._instance._client
 
+
 redis_singleton = RedisClientSingleton()
 redis_client = redis_singleton.client
 
 # Pub/Sub utility
 
+
 def publish(channel, message):
     redis_client.publish(channel, message)
+
 
 def subscribe(channel):
     pubsub = redis_client.pubsub()
     pubsub.subscribe(channel)
     return pubsub
+
 
 # For Celery, set REDIS_URL as broker and backend in your celery config
 # Example:
