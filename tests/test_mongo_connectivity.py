@@ -1,5 +1,7 @@
 import os
+
 from db_clients.mongo_client import db
+
 
 def test_mongo_client():
     try:
@@ -11,6 +13,6 @@ def test_mongo_client():
         print(f"MongoDB client test failed: {e}")
         return False
 
+
 if __name__ == "__main__":
     test_mongo_client()
-

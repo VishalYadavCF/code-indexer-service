@@ -1,12 +1,15 @@
-from pydantic import BaseModel
-from typing import List, Optional
 from datetime import datetime
 from enum import Enum
+from typing import List, Optional
+
+from pydantic import BaseModel
+
 
 class IndexMetaItem(BaseModel):
     key: str
     value: str
     # You can expand this as needed
+
 
 class IndexMetadataResponse(BaseModel):
     id: str

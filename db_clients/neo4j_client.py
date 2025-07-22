@@ -1,6 +1,7 @@
 import os
-from neo4j import GraphDatabase
+
 from dotenv import load_dotenv
+from neo4j import GraphDatabase
 
 load_dotenv()
 
@@ -10,6 +11,7 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
 load_dotenv()
 
+
 class Neo4jClientSingleton:
     _instance = None
 
@@ -17,18 +19,20 @@ class Neo4jClientSingleton:
         if cls._instance is None:
             cls._instance = super(Neo4jClientSingleton, cls).__new__(cls)
             cls._instance.driver = GraphDatabase.driver(
-                NEO4J_URI,
-                auth=(NEO4J_USER, NEO4J_PASSWORD)
+                NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD)
             )
         return cls._instance
 
     def get_session(self):
         return self.driver.session()
 
+
 neo4j_client_singleton = Neo4jClientSingleton()
+
 
 def get_neo4j_session():
     return neo4j_client_singleton.get_session()
+
 
 if __name__ == "__main__":
     try:

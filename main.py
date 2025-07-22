@@ -1,6 +1,8 @@
-import uvicorn
-from clone_controller import app
 from parser.code_parsing_controller import router as parsing_router
+
+import uvicorn
+
+from clone_controller import app
 
 app.include_router(parsing_router)
 
